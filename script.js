@@ -1,5 +1,4 @@
 // GitHub PR Review Image Inserter
-// v1.0.1
 //
 // Terribly-written but functional JS that inserts images directly below
 // the relevant lines within the Markdown file of the "Conversation" and "Files changed" page.
@@ -7,10 +6,16 @@
 // Made with <3 for all the designers out there who have to struggle through
 // GitHub's code-oriented UI while reviewing image-oriented design work.
 
+var version = "v1.1 (July 30, 2019)";
+
+var counter = 0;
+
 if (isFilesChangedPage()) {
   insertFilesChangedImages();
+  insertResults(counter);
 } else {
   insertConversationImages();
+  insertResults(counter);
 }
 
 function isFilesChangedPage() {
@@ -48,6 +53,9 @@ function insertFilesChangedImages() {
       var spanSearchText = filename + ")";
       for (var g = 0; g < spanTags.length; g++) {
         if (spanTags[g].innerHTML.includes(spanSearchText)) {
+
+          // Increment the total images inserted counter
+          counter++;
 
           // Create the image URL and HTML
           var newImageURL = "/" + folderPath + "/raw/" + lastPart;
@@ -101,6 +109,9 @@ function insertConversationImages() {
       // If the line has a Markdown-formatted image, append the image to the line
       if (el.innerHTML.match(/(?:!\[.*?\]\((.*?)\))/)) {
 
+        // Increment the total images inserted counter
+        counter++;
+
         // Get the image path specified in the Markdown line
         var imagePath = el.innerHTML.match(/(?:!\[.*?\]\((.*?)\))/)[1];
 
@@ -126,4 +137,45 @@ function insertConversationImages() {
     });
   });
   return null;
+}
+
+function insertResults(counter) {
+
+  resultsDiv = document.createElement('div');
+  resultsDiv.setAttribute("id", "pr-inserter-results");
+  resultsDiv.innerHTML = '<div class="file"> \
+  <div class="file-header"> \
+  <div class="file-info"> \
+  <span><strong>GitHub PR Image Inserter</strong> ' + version + ' - <a href="https://andybraren.com/tools/gh-pr-image-inserter.html">Check for updates</a></span> \
+  <br> \
+  <span><span id="pr-inserter-count">' + counter + '</span> images inserted.</span> \
+  </div></div></div>';
+
+  resultsConversationDiv = document.createElement('div');
+  resultsConversationDiv.setAttribute("id", "pr-inserter-results");
+  resultsConversationDiv.innerHTML = ' \
+  <div class="discussion-sidebar-item"> \
+  <span><strong>GitHub PR Image Inserter</strong><span> \
+  <br> \
+  <span>' + version + '</span> \
+  <br> \
+  <a href="https://andybraren.com/tools/gh-pr-image-inserter.html">Check for updates</a> \
+  <br> \
+  <span><span id="pr-inserter-count">' + counter + '</span> images inserted</span> \
+  </div>';
+
+  // Insert results once
+  if (document.getElementById("pr-inserter-results") == null) {
+    // Files page
+    if (document.getElementById("diff-0")) {
+      document.getElementById("diff-0").insertAdjacentElement('beforebegin', resultsDiv);
+    }
+    // Conversation page
+    if (document.getElementById("partial-discussion-sidebar")) {
+      document.getElementById("partial-discussion-sidebar").insertAdjacentElement('afterbegin', resultsConversationDiv);
+    }
+  } else {
+    document.getElementById("pr-inserter-count").innerText = counter;
+  }
+
 }
