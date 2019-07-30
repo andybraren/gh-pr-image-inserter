@@ -1,5 +1,5 @@
 // GitHub PR Review Image Inserter
-// v1.0
+// v1.0.1
 //
 // Terribly-written but functional JS that inserts images directly below
 // the relevant lines within the Markdown file of the "Conversation" and "Files changed" page.
@@ -81,15 +81,15 @@ function insertConversationImages() {
 
   // Get every file comment block and loop through each one
   var fileComments = document.getElementsByClassName("has-inline-notes");
-  console.log(fileComments);
+  //console.log(fileComments);
   Array.prototype.forEach.call(fileComments, function(el, i) {
 
     // Get the file info section
     var fileInfo = el.getElementsByClassName("file-info")[0];
     //console.log(fileInfo);
 
-    // Get the commit ID and folder path if the file is a Markdown file
-    if (fileInfo.innerText.indexOf(".md") !== -1) {
+    // Get the commit ID and folder path if the file is a non-top-level Markdown file
+    if (fileInfo.innerText.indexOf(".md") !== -1 && fileInfo.innerText.indexOf("/") !== -1) {
       var folderPath = fileInfo.innerText.match(/(.*)\//)[1]; // web-console/knikubevirt/snapshots
       var commitID = fileInfo.href.match(/files\/(.*)#/)[1];
     }
