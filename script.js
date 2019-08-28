@@ -53,8 +53,14 @@ function insertImages() {
         var imagePath = el.innerText.match(/(?:!\[.*?\]\((.*?)\))/)[1];
         console.log("Image path: " + imagePath)
 
+        // Determine the image URL
+        if (imagePath.startsWith("http")) {
+          imageURL = imagePath;
+        } else {
+          imageURL = repoPath + 'raw/' + commitID + '/' + folderPath + '/' + imagePath;
+        }
+
         // Create the image HTML
-        imageURL = repoPath + 'raw/' + commitID + '/' + folderPath + '/' + imagePath;
         var newImage = document.createElement('div');
         newImage.setAttribute("class", "inserted-image");
         newImage.innerHTML = '<img src="' + imageURL + '" style="max-width:100%;"></img>';
