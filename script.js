@@ -6,7 +6,7 @@
 // Made with <3 for all the designers out there who have to struggle through
 // GitHub's code-oriented UI while reviewing image-oriented design work.
 
-var version = "v1.1 (July 30, 2019)";
+var version = "v1.1.1 (August 27, 2019)";
 
 var counter = 0;
 
@@ -86,20 +86,25 @@ function insertConversationImages() {
 
   // Get the path of the repository
   var repoPath = window.location.pathname.match(/(.*)pull/)[1];
+  console.log("Repo Path: " + repoPath);
 
   // Get every file comment block and loop through each one
   var fileComments = document.getElementsByClassName("has-inline-notes");
-  //console.log(fileComments);
   Array.prototype.forEach.call(fileComments, function(el, i) {
 
     // Get the file info section
-    var fileInfo = el.getElementsByClassName("file-info")[0];
-    //console.log(fileInfo);
+    var fileInfo = el.getElementsByClassName("file-header")[0];
 
     // Get the commit ID and folder path if the file is a non-top-level Markdown file
     if (fileInfo.innerText.indexOf(".md") !== -1 && fileInfo.innerText.indexOf("/") !== -1) {
-      var folderPath = fileInfo.innerText.match(/(.*)\//)[1]; // web-console/knikubevirt/snapshots
-      var commitID = fileInfo.href.match(/files\/(.*)#/)[1];
+      
+      // Get the folder path
+      var folderPath = fileInfo.getElementsByTagName('a')[0].innerText.match(/(.*)\//)[1]; // web-console/knikubevirt/snapshots
+      console.log("Folder path: " + folderPath);
+
+      // Get the commit ID
+      var commitID = fileInfo.getElementsByTagName('a')[0].href.match(/files\/(.*)#/)[1];  // cf261a1f8ac7d4d46d88388e0387b6e0f7de30ef
+      console.log("Commit ID: " + commitID);
     }
     
     // Loop through every Markdown line
