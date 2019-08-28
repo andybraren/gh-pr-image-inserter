@@ -1,7 +1,7 @@
 // GitHub PR Review Image Inserter
 // Made with <3 for designers working in a GitHubby world.
 
-var version = "v1.2 (August 27, 2019)";
+var version = "v1.2.1 (August 27, 2019)";
 var counter = 0;
 
 insertImages();
