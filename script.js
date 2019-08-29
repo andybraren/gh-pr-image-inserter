@@ -1,7 +1,7 @@
 // GitHub PR Review Image Inserter
 // Made with <3 for designers working in a GitHubby world.
 
-var version = "v1.2.1 (August 27, 2019)";
+var version = "v1.2.2 (August 29, 2019)";
 var counter = 0;
 
 insertImages();
@@ -28,14 +28,15 @@ function insertImages() {
       // Get the folder path of the file
       var folderPath = fileInfo.getElementsByTagName('a')[0].innerText.match(/(.*)\//)[1]; // web-console/knikubevirt/snapshots
       console.log("Folder path: " + folderPath);
+      
+      if (fileInfo.querySelector('.file-actions .js-file-header-dropdown details-menu a')) {
+        var commitID = fileInfo.querySelector('.file-actions .js-file-header-dropdown details-menu a').href.match(/blob\/(.*?)\//)[1];
+        console.log(commitID);
+      }
 
-      // Get the commit ID of the file
-      if (fileInfo.getElementsByClassName('rgh-has-raw-file-link')[0]) { // Applies to older commit pages that aren't the most recent
-        var commitID = fileInfo.getElementsByClassName('rgh-has-raw-file-link')[0].href.match(/blob\/(.*?)\//)[1];
-        console.log("Commit ID: " + commitID);
-      } else { // Applies to all other pages
-        var commitID = fileInfo.getElementsByTagName('a')[0].href.match(/files\/(.*)#/)[1];  // cf261a1f8ac7d4d46d88388e0387b6e0f7de30ef
-        console.log("Commit ID: " + commitID);
+      if (fileInfo.querySelector('a.text-mono.text-small')) {
+        var commitID = fileInfo.querySelector('a.text-mono.text-small').href.match(/files\/(.*)#/)[1];
+        console.log(commitID);
       }
     }
     
